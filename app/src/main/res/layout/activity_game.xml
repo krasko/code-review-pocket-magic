@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_primary"
+    tools:context="ru.spbhse.pocketmagic.GameActivity">
+
+    <ImageView
+        android:id="@+id/opponentAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="fitEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/opponent_normal" />
+
+    <ImageView
+        android:id="@+id/fog"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/gestureListener"
+        app:layout_constraintTop_toBottomOf="@+id/opponentHP"
+        app:srcCompat="@drawable/weather_fog" />
+
+    <ImageView
+        android:id="@+id/playerEffect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintEnd_toEndOf="@id/gestureListener"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/gestureListener"
+        app:layout_constraintTop_toBottomOf="@+id/opponentHP"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@mipmap/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/opponentBuffB"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="TODO"
+        app:layout_constraintEnd_toStartOf="@+id/opponentBuffA"
+        app:layout_constraintTop_toTopOf="@+id/gestureListener"
+        app:srcCompat="@mipmap/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/opponentBuffA"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="TODO"
+        app:layout_constraintEnd_toEndOf="@+id/gestureListener"
+        app:layout_constraintTop_toTopOf="@+id/gestureListener"
+        app:srcCompat="@mipmap/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/playerBuffB"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintStart_toEndOf="@+id/playerBuffA"
+        app:srcCompat="@mipmap/ic_launcher_background" />
+
+    <ImageView
+        android:id="@+id/playerBuffA"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintStart_toStartOf="@+id/gestureListener" />
+
+    <ImageView
+        android:id="@+id/opponentSpell"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/opponentBuffB"
+        app:srcCompat="@mipmap/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/opponentName"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/baloo_tamma"
+        android:textColor="@android:color/background_dark"
+        android:textSize="25sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/opponentHP" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/baloo_tamma"
+        android:textColor="#9E0F0F"
+        android:textSize="50sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/valueMP"
+        app:layout_constraintEnd_toEndOf="@+id/gestureListener" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerSun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/playerBuffB"
+        app:layout_constraintEnd_toEndOf="@id/gestureListener"
+        app:layout_constraintTop_toBottomOf="@+id/opponentSpell" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/playerCast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/playerMP"
+        app:layout_constraintEnd_toEndOf="@id/gestureListener"
+        app:layout_constraintTop_toBottomOf="@+id/opponentSpell" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/ices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintEnd_toEndOf="@+id/gestureListener"
+        app:layout_constraintStart_toStartOf="@+id/fog"
+        app:layout_constraintTop_toTopOf="@+id/gestureListener" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/breeze"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gestureListener"
+        app:layout_constraintEnd_toEndOf="@+id/gestureListener"
+        app:layout_constraintStart_toStartOf="@id/gestureListener"
+        app:layout_constraintTop_toTopOf="@+id/gestureListener" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/opponentSun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/playerBuffB"
+        app:layout_constraintStart_toStartOf="@id/gestureListener"
+        app:layout_constraintTop_toBottomOf="@+id/opponentSpell" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/opponentCast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/playerBuffB"
+        app:layout_constraintStart_toStartOf="@id/gestureListener"
+        app:layout_constraintTop_toBottomOf="@+id/opponentSpell" />
+
+    <android.gesture.GestureOverlayView
+        android:id="@+id/gestureListener"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fadeDuration="0"
+        android:fadeOffset="0"
+        android:gestureColor="#C1260547"
+        android:gestureStrokeWidth="50"
+        android:uncertainGestureColor="#C1260547"
+        app:layout_constraintBottom_toTopOf="@+id/playerMP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/opponentHP"
+        app:layout_constraintVertical_bias="1.0">
+
+    </android.gesture.GestureOverlayView>
+
+    <ProgressBar
+        android:id="@+id/opponentHP"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:max="20"
+        android:progress="20"
+        android:progressDrawable="@drawable/opponent_hp_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/playerHP"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:max="20"
+        android:progress="20"
+        android:progressDrawable="@drawable/player_hp_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/playerMP"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:max="20"
+        android:progress="20"
+        android:progressDrawable="@drawable/player_mp_progress"
+        app:layout_constraintBottom_toTopOf="@+id/playerHP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/valueHP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/baloo_tamma"
+        android:text="20/20"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/playerHP"
+        app:layout_constraintEnd_toEndOf="@+id/playerHP"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="@+id/playerHP"
+        app:layout_constraintTop_toTopOf="@+id/playerHP" />
+
+    <TextView
+        android:id="@+id/valueOHP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/baloo_tamma"
+        android:text="20/20"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/opponentHP"
+        app:layout_constraintEnd_toEndOf="@+id/opponentHP"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="@+id/opponentHP"
+        app:layout_constraintTop_toTopOf="@+id/opponentHP" />
+
+    <TextView
+        android:id="@+id/valueMP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/baloo_tamma"
+        android:text="20/20"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/playerMP"
+        app:layout_constraintEnd_toEndOf="@+id/playerMP"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="@+id/playerMP"
+        app:layout_constraintTop_toTopOf="@+id/playerMP" />
+
+</android.support.constraint.ConstraintLayout>
