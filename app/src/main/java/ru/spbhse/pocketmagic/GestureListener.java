@@ -12,6 +12,8 @@ public class GestureListener implements GestureOverlayView.OnGesturePerformedLis
     private GestureLibrary gestureLibrary;
     private GameActivity.Caster caster;
 
+    private static final int SENSITIVITY = 2;
+
     GestureListener(GestureLibrary gestureLibrary, GameActivity.Caster caster) {
         this.gestureLibrary = gestureLibrary;
         this.caster = caster;
@@ -24,7 +26,7 @@ public class GestureListener implements GestureOverlayView.OnGesturePerformedLis
         if (predictionList.size() > 0) {
             Prediction firstPrediction = predictionList.get(0);
 
-            if (firstPrediction.score > 2) {
+            if (firstPrediction.score > SENSITIVITY) {
                 caster.cast(firstPrediction.name);
             }
         }
