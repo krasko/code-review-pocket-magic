@@ -17,7 +17,9 @@ public class NetworkController {
     private static Network network;
 
     public static Network createNetwork(GoogleSignInAccount account) {
-        network = new Network(account);
+        if (network == null) {
+            network = new Network(account);
+        }
         return network;
     }
 
