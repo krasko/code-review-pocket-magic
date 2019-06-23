@@ -6,42 +6,42 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/** Class for database works. */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "spells.db";
     private static String DB_PATH = "";
     private static final int DB_VERSION = 15;
 
-    private SQLiteDatabase mDataBase;
-    private final Context mContext;
-    private boolean mNeedUpdate = false;
+    private SQLiteDatabase database;
+    private final Context context;
+    private boolean needUpdate = false;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        if (android.os.Build.VERSION.SDK_INT >= 17)
+        if (android.os.Build.VERSION.SDK_INT >= 17) {
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
-        else
+        } else {
             DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
-        this.mContext = context;
-
+        }
+        this.context = context;
         copyDataBase();
-
         this.getReadableDatabase();
     }
 
-    public void updateDataBase() throws IOException {
-        if (mNeedUpdate) {
+    public void updateDataBase() {
+        if (needUpdate) {
             File dbFile = new File(DB_PATH + DB_NAME);
-            if (dbFile.exists())
+            if (dbFile.exists()) {
                 dbFile.delete();
-
+            }
             copyDataBase();
-
-            mNeedUpdate = false;
+            needUpdate = false;
         }
     }
 
@@ -54,47 +54,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (!checkDataBase()) {
             this.getReadableDatabase();
             this.close();
-            try {
-                copyDBFile();
-            } catch (IOException mIOException) {
-                throw new Error("ErrorCopyingDataBase");
-            }
+            copyDBFile();
         }
     }
 
-    private void copyDBFile() throws IOException {
-        InputStream mInput = mContext.getAssets().open(DB_NAME);
-        //InputStream mInput = mContext.getResources().openRawResource(R.raw.info);
-        OutputStream mOutput = new FileOutputStream(DB_PATH + DB_NAME);
-        byte[] mBuffer = new byte[1024];
-        int mLength;
-        while ((mLength = mInput.read(mBuffer)) > 0)
-            mOutput.write(mBuffer, 0, mLength);
-        mOutput.flush();
-        mOutput.close();
-        mInput.close();
+    private void copyDBFile() {
+        try (InputStream input = context.getAssets().open(DB_NAME); OutputStream output = new FileOutputStream(DB_PATH + DB_NAME)) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = input.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Error(e);
+        }
     }
 
     public boolean openDataBase() throws SQLException {
-        mDataBase = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        return mDataBase != null;
+        database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        return database != null;
     }
 
     @Override
     public synchronized void close() {
-        if (mDataBase != null)
-            mDataBase.close();
+        if (database != null) {
+            database.close();
+        }
         super.close();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion)
-            mNeedUpdate = true;
+            needUpdate = true;
     }
 }
