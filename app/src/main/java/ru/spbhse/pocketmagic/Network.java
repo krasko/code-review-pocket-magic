@@ -204,16 +204,16 @@ public class Network {
                 .addOnSuccessListener(new OnSuccessListener<Bundle>() {
                     @Override
                     public void onSuccess(Bundle hint) {
-                        if (hint != null) {
-                            Invitation invitation =
-                                    hint.getParcelable(Multiplayer.EXTRA_INVITATION);
-
-                            if (invitation != null && invitation.getInvitationId() != null) {
-                                // retrieve and cache the invitation ID
-                                Log.d("Pocket Magic", "Connection hint has a room invite!");
-                                acceptInviteToRoom(invitation.getInvitationId());
-                            }
+                        if (hint == null) {
+                            return;
                         }
+                        Invitation invitation = hint.getParcelable(Multiplayer.EXTRA_INVITATION);
+                        if (invitation == null && invitation.getInvitationId() == null) {
+                            return;
+                        }
+                        // retrieve and cache the invitation ID
+                        Log.d("Pocket Magic", "Connection hint has a room invite!");
+                        acceptInviteToRoom(invitation.getInvitationId());
                     }
                 });
 
