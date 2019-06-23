@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_id" translatable="false">856998289633</string>
+    <string name="package_name" translatable="false">ru.spbhse.pocketmagic</string>
+    <string name="server_client_id">856998289633-qf15e6nns7f1sk31lf49d3c73t6lavnu.apps.googleusercontent.com</string>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Pocket Magic</string>
+    <string name="larry">Larry</string>
+    <string name="menu">MENU</string>
+    <string name="bot">BOT</string>
+    <string name="finding_opponent">FINDING OPPONENT...</string>
+    <string name="cancel">cancel</string>
+</resources>
