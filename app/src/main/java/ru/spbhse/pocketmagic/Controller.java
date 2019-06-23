@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -140,7 +141,7 @@ public class Controller {
         painter.setOpponentState(logic.opponentState);
     }
 
-    /**  */
+    /** Makes a decision how to show player spell depending on type of the spell. */
     private void showPlayerCast(String spell) {
         painter.setOpponentState(logic.opponentState);
         String spellType = logic.getTypeByName(spell);
@@ -156,6 +157,7 @@ public class Controller {
         }
     }
 
+    /** Makes a decision how to show opponent spell depending on type of the spell. */
     private void showOpponentCast(String spell) {
         if (logic.getTypeByName(spell).equals("buff")) {
             painter.showOpponentBuff(spell);
@@ -163,6 +165,7 @@ public class Controller {
         painter.showOpponentCast(spell);
     }
 
+    /** Part of the opponent spell after cast and throwing. */
     private  void stopOpponentSpell(String spell) {
         if (logic.getTypeByName(spell).equals("buff")) {
             painter.hideOpponentBuff(spell);
@@ -176,6 +179,7 @@ public class Controller {
         painter.setOpponentState(logic.opponentState);
     }
 
+    /** Class extending AsyncTask for Throwing opponent spell in other thread. */
     private class ThrowOpponentSpell extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... spells) {
@@ -206,6 +210,7 @@ public class Controller {
         }
     }
 
+    /** Class extending AsyncTask for Throwing player spell in other thread. */
     private class ThrowPlayerSpell extends AsyncTask<String, String, String> {
 
         @Override
@@ -237,7 +242,7 @@ public class Controller {
         }
     }
 
-
+    /** Bot -- opponent imitation in other thread. */
     private class Bot extends AsyncTask<Void, Void, Void> {
         private boolean isAlive = true;
         private Random random = new Random();
@@ -265,6 +270,7 @@ public class Controller {
         }
     }
 
+    /** Class extending AsyncTask for generating mana in other thread. */
     private class ManaGenerator extends AsyncTask<Void, Void, Void> {
         private boolean isAlive = true;
 
@@ -291,6 +297,7 @@ public class Controller {
         }
     }
 
+    /** Class with logic of the game. */
     private class Logic {
         private static final int MAX_HP = 20;
         private static final int MAX_MP = 20;
@@ -306,11 +313,11 @@ public class Controller {
         private PlayerState playerState = PlayerState.NORMAL;
         private PlayerState opponentState = PlayerState.NORMAL;
 
-        public Logic() {
+        private Logic() {
             mDBHelper = new DatabaseHelper(painter.getContext());
             try {
                 mDBHelper.updateDataBase();
-            } catch (IOException mIOException) {
+            } catch (Error e) {
                 throw new Error("UnableToUpdateDatabase");
             }
             try {
@@ -320,32 +327,32 @@ public class Controller {
             }
         }
 
-        public int getPlayerHP() {
+        private int getPlayerHP() {
             return playerHP;
         }
 
-        public int getOpponentHP() {
+        private int getOpponentHP() {
             return opponentHP;
         }
 
-        public int getPlayerMP() {
+        private int getPlayerMP() {
             return playerMP;
         }
 
-        public int getMaxHp() {
+        private int getMaxHp() {
             return MAX_HP;
         }
 
-        public int getMaxMp() {
+        private int getMaxMp() {
             return MAX_MP;
         }
 
-        synchronized public void initializeCast(String spell) {
+        synchronized private void initializeCast(String spell) {
             playerMP -= getCostByName(spell);
             playerMP = max(0, playerMP);
         }
 
-        synchronized public void playerSpell(String spell) {
+        synchronized private void playerSpell(String spell) {
             playerHP += getHealingByName(spell);
             playerHP = min(playerHP, MAX_HP);
             opponentHP -= calcOpponentDamage(spell);
@@ -353,7 +360,7 @@ public class Controller {
             updateOpponentState(spell);
         }
 
-        public int calcPlayerDamage(String spell) {
+        private int calcPlayerDamage(String spell) {
             int result = getDamageByName(spell);
             if (playerState == PlayerState.WET && spell.equals("Lightning")) {
                 result = result * SPELL_LENS;
@@ -364,7 +371,7 @@ public class Controller {
             return result;
         }
 
-        public int calcOpponentDamage(String spell) {
+        private int calcOpponentDamage(String spell) {
             int result = getDamageByName(spell);
             if (opponentState == PlayerState.WET && spell.equals("Lightning")) {
                 result = result * SPELL_LENS;
@@ -375,7 +382,7 @@ public class Controller {
             return result;
         }
 
-        synchronized public void opponentSpell(String spell) {
+        synchronized private void opponentSpell(String spell) {
             playerHP -= calcPlayerDamage(spell);
             playerHP = max(playerHP, 0);
             opponentHP += getHealingByName(spell);
@@ -383,7 +390,7 @@ public class Controller {
             updatePlayerState(spell);
         }
 
-        synchronized public void updatePlayerState(String spell) {
+        synchronized private void updatePlayerState(String spell) {
             if (spell.equals("hide") || spell.equals("after spell")) {
                 playerState = PlayerState.NORMAL;
             }
@@ -413,7 +420,7 @@ public class Controller {
             }
         }
 
-        synchronized public void updateOpponentState(String spell) {
+        synchronized private void updateOpponentState(String spell) {
             if (spell.equals("hide") || spell.equals("after spell")) {
                 opponentState = PlayerState.NORMAL;
             }
@@ -443,7 +450,7 @@ public class Controller {
             }
         }
 
-        public String ableToThrowTheSpell(String spell) {
+        private String ableToThrowTheSpell(String spell) {
             if (spell.equals("ExhaustingSun") && playerState.equals(PlayerState.FOG)) {
                 return "You can't cast ExhaustingSun through the fog";
             }
@@ -456,61 +463,61 @@ public class Controller {
             return "ok";
         }
 
-        synchronized public void generateMana(int mana) {
+        synchronized private void generateMana(int mana) {
             playerMP += mana;
             playerMP = min(playerMP, MAX_MP);
         }
 
-        public String getNameById(int spellID) {
+        private String getNameById(int spellID) {
             Cursor cursor = mDb.rawQuery("SELECT name FROM spells WHERE _id=" + String.valueOf(spellID), null);
             cursor.moveToFirst();
             return cursor.getString(0);
         }
 
-        public int getIDByName(String spell) {
+        private int getIDByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT _id FROM spells WHERE name='" + spell + "'", null);
             cursor.moveToFirst();
             return cursor.getInt(0);
         }
 
-        public int getCostByName(String spell) {
+        private int getCostByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT cost FROM spells WHERE name='" + spell + "'", null);
             cursor.moveToFirst();
             return cursor.getInt(0);
         }
 
-        public int getDamageByName(String spell) {
+        private int getDamageByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT damage FROM spells WHERE name=?", new String[] {spell});
             cursor.moveToFirst();
             return cursor.getInt(0);
         }
 
-        public double getCastByName(String spell) {
+        private double getCastByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT \"cast\" FROM spells WHERE name='" + spell + "'", null);
             cursor.moveToFirst();
             return cursor.getDouble(0);
         }
 
-        public double getDurationByName(String spell) {
+        private double getDurationByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT duration FROM spells WHERE name=?", new String[] {spell});
             cursor.moveToFirst();
             return cursor.getDouble(0);
         }
 
-        public String getTypeByName(String spell) {
+        private String getTypeByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT type FROM spells WHERE name='" + spell + "'", null);
             cursor.moveToFirst();
             return cursor.getString(0);
         }
 
-        public int getHealingByName(String spell) {
+        private int getHealingByName(String spell) {
             Cursor cursor = mDb.rawQuery("SELECT healing FROM spells WHERE name='" + spell + "'", null);
             cursor.moveToFirst();
             return cursor.getInt(0);
         }
 
-        public ArrayList<Spell> getAllSpells() {
-            ArrayList<Spell> result = new ArrayList<Spell>();
+        private List<Spell> getAllSpells() {
+            List<Spell> result = new ArrayList<Spell>();
             Cursor cursor = mDb.rawQuery("SELECT * FROM spells", null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -522,8 +529,8 @@ public class Controller {
             return result;
         }
 
-        public ArrayList<String> getAllSpellNames() {
-            ArrayList<String> result = new ArrayList<String>();
+        private List<String> getAllSpellNames() {
+            List<String> result = new ArrayList<String>();
             Cursor cursor = mDb.rawQuery("SELECT name FROM spells", null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
