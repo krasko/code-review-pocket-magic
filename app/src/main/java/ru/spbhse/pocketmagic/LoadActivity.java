@@ -19,7 +19,7 @@ public class LoadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_load);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        /* Wait 2 seconds before starting other activity. */
+        /* Wait 2 seconds before starting other activity to avoid freezes. */
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
